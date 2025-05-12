@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body {
+    margin-top: 64px;
+}
+
+@media (min-width: 1024px) {
+    body {
+        margin-top: 96px;
+    }
+  }
+
+.alink {
+    @apply text-sky-400 hover:text-sky-950;
+}
