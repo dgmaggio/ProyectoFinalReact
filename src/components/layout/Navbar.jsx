@@ -32,13 +32,15 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className="flex flex-wrap items-center justify-between">
+        <nav className="sticky z-50 flex flex-wrap items-center justify-between">
             <div className="flex items-center space-x-4 lg:space-x-0 lg:w-1/4">
                 {/* Botón hamburguesa */}
                 <button
-                    className="lg:hidden w-4"
+                    className="lg:hidden w-6 h-6"
                     onClick={toggleMenu}
                     ref={buttonRef}
+                    aria-label="Toggle menu"
+                    aria-expanded={isMenuOpen}
                 >
                     <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} />
                 </button>
@@ -57,13 +59,16 @@ const Navbar = () => {
             <div
                 ref={menuRef}
                 className={`${
-                    isMenuOpen ? 'fixed top-16 left-0 right-0  bg-sky-950 z-50 flex' : 'hidden'
-                } w-full lg:static lg:w-auto flex-col lg:flex lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4 p-4 lg:p-0`}
+                    isMenuOpen
+                    ? 'fixed z-40 top-16 left-0 right-0 bottom-0 bg-sky-950 flex'
+                      : 'hidden'
+                  } w-full lg:static lg:w-auto flex-col lg:flex lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4 p-4 lg:p-0`}
+                  
             >
                 <NavLink
                     to="/productos"
                     className={({ isActive }) =>
-                        `font-bold ${!isActive ? 'text-sky-400 hover:text-white' : ''}`
+                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -73,7 +78,7 @@ const Navbar = () => {
                 <NavLink
                     to="/novedades"
                     className={({ isActive }) =>
-                        `font-bold ${!isActive ? 'text-sky-400 hover:text-white' : ''}`
+                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -83,7 +88,7 @@ const Navbar = () => {
                 <NavLink
                     to="/ofertas"
                     className={({ isActive }) =>
-                        `font-bold ${!isActive ? 'text-sky-400 hover:text-white' : ''}`
+                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -99,7 +104,10 @@ const Navbar = () => {
                         `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-sky-500 hover:text-sky-400' : ''}`
                     }
                 >
-                    <FontAwesomeIcon icon={faUser} />
+                    <FontAwesomeIcon
+                        icon={faUser}
+                        className="w-6 h-6" 
+                    />
                     <span className="hidden lg:inline-block">Administración</span>
                 </NavLink>
 
@@ -109,7 +117,10 @@ const Navbar = () => {
                         `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-sky-500 hover:text-sky-400' : ''}`
                     }
                 >
-                    <FontAwesomeIcon icon={faCartShopping} />
+                    <FontAwesomeIcon
+                        icon={faCartShopping}
+                        className="w-6 h-6"
+                    />
                     <span className="hidden lg:inline-block">Carrito</span>
                 </NavLink>
             </div>

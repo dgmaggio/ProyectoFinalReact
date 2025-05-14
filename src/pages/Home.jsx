@@ -27,7 +27,7 @@ const Home = () => {
             <div className="w-full md:w-1/2 flex flex-col h-1/2 md:h-full">
                 
                 <div className="relative group px-4 lg:px-8 h-full h-1/2 bg-green-100 flex items-center bg-[url('./assets/images/herobg2.jpg')] bg-cover bg-center">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-black/80 group-hover:from-sky-950/80 transition"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/80 group-hover:from-sky-950/80 transition"></div>
 
                         <div className="flex flex-col space-y-2 md:space-y-4 z-10 md:items-center md:mx-auto md:text-center lg:w-1/2">
                             <h2 className="md:text-2xl lg:text-4xl font-semibold pb-2">Los gadgets más modernos y a precios increíbles</h2>
@@ -43,7 +43,7 @@ const Home = () => {
                 
                 
                 <div className="relative group px-4 lg:px-8 h-full h-1/2 bg-green-100 flex items-center bg-[url('./assets/images/herobg3.jpg')] bg-cover bg-center">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-black/80 group-hover:from-sky-950/80 transition"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/80 group-hover:from-sky-950/80 transition"></div>
 
                         <div className="flex flex-col space-y-2 md:space-y-4 z-10 md:items-center md:mx-auto md:text-center lg:w-1/2">
                             <h2 className="md:text-2xl lg:text-4xl font-semibold pb-2">Liquidamos todas las bicicletas y monopatines</h2>
