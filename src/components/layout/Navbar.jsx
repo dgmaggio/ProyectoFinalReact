@@ -60,15 +60,15 @@ const Navbar = () => {
                 ref={menuRef}
                 className={`${
                     isMenuOpen
-                    ? 'fixed z-40 top-16 left-0 right-0 bottom-0 bg-sky-950 flex'
+                    ? 'fixed z-40 top-16 left-0 right-0 bottom-0 bg-cyan-950 flex'
                       : 'hidden'
-                  } w-full lg:static lg:w-auto flex-col lg:flex lg:flex-row lg:items-center space-y-4 lg:space-y-0 lg:space-x-4 p-4 lg:p-0`}
+                  } w-full lg:static lg:w-auto flex-col lg:flex lg:flex-row lg:items-center lg:space-x-4 p-4 pt-0 lg:p-0`}
                   
             >
                 <NavLink
                     to="/productos"
                     className={({ isActive }) =>
-                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -78,7 +78,7 @@ const Navbar = () => {
                 <NavLink
                     to="/novedades"
                     className={({ isActive }) =>
-                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -88,11 +88,61 @@ const Navbar = () => {
                 <NavLink
                     to="/ofertas"
                     className={({ isActive }) =>
-                        `font-bold ${isActive ? 'text-white' : 'text-sky-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
                     Ofertas
+                </NavLink>
+
+                <NavLink
+                    to="/carrito"
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden border-b-1 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Carrito
+                </NavLink>
+
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Inicio
+                </NavLink>
+
+                <NavLink
+                    to="/nosotros"
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Nosotros
+                </NavLink>
+
+                <NavLink
+                    to="/contacto"
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden border-b-1 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Contacto
+                </NavLink>
+
+                <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Administración
                 </NavLink>
             </div>
 
@@ -101,7 +151,7 @@ const Navbar = () => {
                 <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-sky-500 hover:text-sky-400' : ''}`
+                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
                     }
                 >
                     <FontAwesomeIcon
@@ -114,7 +164,7 @@ const Navbar = () => {
                 <NavLink
                     to="/carrito"
                     className={({ isActive }) =>
-                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-sky-500 hover:text-sky-400' : ''}`
+                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
                     }
                 >
                     <FontAwesomeIcon

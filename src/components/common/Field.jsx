@@ -32,7 +32,7 @@ const Field = ({
                 placeholder={placeholder}
                 required={required}
                 rows={as === "textarea" ? rows : undefined}
-                className={`w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-sky-400 ${className}`}
+                className={`w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400 ${className}`}
             />
         </div>
     );

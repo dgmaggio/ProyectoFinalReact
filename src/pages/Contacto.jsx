@@ -96,11 +96,11 @@ const Contacto = () => {
 
                         <a
                             href="https://maps.app.goo.gl/6hPmnAosjaAcjQkH8"
-                            className="group inline-block leading-6 hover:text-sky-950"
+                            className="group inline-block leading-6 hover:text-cyan-950"
                         >
                             Blvd. San Martín 2215<br/>
                             Cdad. Jardín Lomas de Palomar (B1684BJN)<br/>
-                            Provincia de Buenos Aires <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-sky-400 group-hover:text-sky-950 ms-1" />
+                            Provincia de Buenos Aires <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-cyan-400 group-hover:text-cyan-950 ms-1" />
                         </a>
                     </p>
 
@@ -115,9 +115,9 @@ const Contacto = () => {
 
                         <a
                             href="mailto:info@proyectofinal.com.ar"
-                            className="group hover:text-sky-950"
+                            className="group hover:text-cyan-950"
                         >
-                            info@proyectofinal.com.ar <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-sky-400 group-hover:text-sky-950 ms-1" />
+                            info@proyectofinal.com.ar <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-cyan-400 group-hover:text-cyan-950 ms-1" />
                         </a>
                     </p>
 
@@ -126,9 +126,9 @@ const Contacto = () => {
 
                         <a
                             href="https://api.whatsapp.com/send?phone=5491112345678"
-                            className="group hover:text-sky-950"
+                            className="group hover:text-cyan-950"
                         >
-                            +54 911 1235 45678 <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-sky-400 group-hover:text-sky-950 ms-1" />
+                            +54 911 1235 45678 <FontAwesomeIcon icon={faArrowUpRightFromSquare} size="xs" className="text-cyan-400 group-hover:text-cyan-950 ms-1" />
                         </a>
                     </p>
                 </div>

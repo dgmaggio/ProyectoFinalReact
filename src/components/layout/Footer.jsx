@@ -20,7 +20,7 @@ const Footer = () => {
                                     to="/"
                                     className="alink"
                                 >
-                                    Home
+                                    Inicio
                                 </NavLink>
                             </li>
 
