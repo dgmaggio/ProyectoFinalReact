@@ -60,31 +60,31 @@ const Login = () => {
 
                 <ul className="flex flex-col space-y-1 text-sm">
                     <li>
-                        <a
-                            href="#"
+                        <Link
+                            to="#"
                             className="alink"
                         >
                             Olvidé mi contraseña
 
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="#"
+                        <Link
+                            to="#"
                             className="alink"
                         >
                             Quiero registrarme
 
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="#"
+                        <Link
+                           to="#"
                             className="alink"
                         >
                             Necesito ayuda
 
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

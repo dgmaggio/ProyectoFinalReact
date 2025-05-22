@@ -9,6 +9,8 @@ import Nosotros from './pages/Nosotros'
 import Contacto from './pages/Contacto'
 import Carrito from './pages/Carrito'
 import Login from './pages/Login'
+import ProductoDetalle from './pages/ProductoDetalle'
+import NotFound from './pages/NotFound'
 import './App.css'
 
 
@@ -27,6 +29,8 @@ function App() {
                     <Route path="/contacto" element={<Contacto />} />
                     <Route path="/carrito" element={<Carrito />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/productos/:id" element={<ProductoDetalle />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </main>
             <Footer />

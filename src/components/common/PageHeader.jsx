@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
 
-const PageHeader = ({ title = '' }) => {
+const PageHeader = ({ title = '', noTitle = false }) => {
     const location = useLocation();
     const path = location.pathname;
-
+    
     const centrarTitulo = !["/", "/productos", "/novedades", "/ofertas"].includes(path);
 
     const segments = location.pathname
@@ -26,16 +26,18 @@ const PageHeader = ({ title = '' }) => {
                     <span key={index}>
                         <span className="mx-1"> / </span>
                         {index === pathLinks.length - 1 ? (
-                            <span className="text-zinc-500">{item.label}</span>
+                            <span className="text-zinc-500">{index === pathLinks.length - 1 && title ? title : item.label}</span>
                         ) : (
                             <Link to={item.path} className="font-bold hover:text-cyan-950 text-cyan-400">{item.label}</Link>
                         )}
                     </span>
                 ))}
             </nav>
-            <h1 className="text-3xl font-bold text-cyan-950">
-                {title || (pathLinks.at(-1)?.label ?? 'Página')}
-            </h1>
+            {!noTitle && (
+                <h1 className="text-3xl font-bold text-cyan-950">
+                    {title || (pathLinks.at(-1)?.label ?? 'Página')}
+                </h1>
+            )}
         </div>
     );
 };

@@ -1,5 +1,4 @@
-import React from 'react';
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -16,39 +15,39 @@ const Footer = () => {
             
                         <ul className="flex flex-col space-y-1">
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/"
                                     className="alink"
                                 >
                                     Inicio
-                                </NavLink>
+                                </Link>
                             </li>
 
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/nosotros"
                                     className="alink"
                                 >
                                     Nosotros
-                                </NavLink>
+                                </Link>
                             </li>
 
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/contacto"
                                     className="alink"
                                 >
                                     Contacto
-                                </NavLink>
+                                </Link>
                             </li>
 
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/login"
                                     className="alink"
                                 >
                                     Administración
-                                </NavLink>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -62,39 +61,39 @@ const Footer = () => {
 
                         <ul className="flex flex-col space-y-1">
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/productos"
                                     className="alink"
                                 >
                                     Productos
-                                </NavLink>
+                                </Link>
                             </li>
                             
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/novedades"
                                     className="alink"
                                 >
                                     Novedades
-                                </NavLink>
+                                </Link>
                             </li>
                             
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/ofertas"
                                     className="alink"
                                 >
                                     Ofertas
-                                </NavLink>
+                                </Link>
                             </li>
 
                             <li>                        
-                                <NavLink
+                                <Link
                                     to="/carrito"
                                     className="alink"
                                 >
                                     Carrito
-                                </NavLink>
+                                </Link>
                             </li>
                         </ul>
                     </div>

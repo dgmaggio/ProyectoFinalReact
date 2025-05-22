@@ -1,0 +1,12 @@
+body {
+    margin-top: 64px;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+@media (min-width: 1024px) {
+    body {
+        margin-top: 96px;
+    }
+}
