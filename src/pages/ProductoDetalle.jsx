@@ -4,11 +4,20 @@ import PageHeader from '../components/common/PageHeader';
 import LoadingMsg from '../components/common/LoadingMsg';
 import Button from '../components/common/Button';
 import { formatPrice } from '../utils/formatPrice';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ProductoDetalle = () => {
     const { id } = useParams();
     const [producto, setProducto] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const notify = () => {
+        toast.success(
+          <>
+            Se agregó {producto.title.slice(0, 25)}...
+          </>
+        );
+      };
 
     useEffect(() => {
         setLoading(true);
@@ -52,13 +61,15 @@ const ProductoDetalle = () => {
                 <p className="text-2xl pb-3">{formatPrice(producto.price)}</p>
 
                 <p className="text-sm pb-6">{producto.description}</p>
-
+                
                 <Button
-                    onClick={() => alert(`Agregado: ${producto.title}`)}
+                    onClick={notify}
                     className="w-full"
                 >
                     Agregar al carrito
                 </Button>
+
+                <Toaster />
             </div>
         </div>
         </section>

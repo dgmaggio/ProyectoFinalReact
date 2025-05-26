@@ -1,8 +1,18 @@
 import Button from './Button';
 import { Link } from "react-router-dom";
 import { formatPrice } from '../../utils/formatPrice';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Card = ({ producto }) => {
+    
+    const notify = () => {
+        toast.success(
+          <>
+            Se agregó {producto.title.slice(0, 25)}...
+          </>
+        );
+    };
+
     return (
         <>
             <div className="border border-zinc-300 bg-white p-4 rounded-md flex flex-col space-x-4 justify-between hover:shadow-lg transition">
@@ -27,11 +37,13 @@ const Card = ({ producto }) => {
 
                 <div className="flex flex-col space-y-2">
                     <Button
-                        onClick={() => alert(`Agregado: ${producto.title}`)}
+                        onClick={notify}
                         className="w-full text-xs lg:px-0"
                     >
                         Agregar al carrito
                     </Button>
+                    
+                    <Toaster />
 
                     <Link
                         to={`/productos/${producto.id}`}
