@@ -1,13 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/react.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faBars, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faBars, faCartShopping, faUser, faRightFromBracket, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    const navigate = useNavigate();
+    const isAuth = localStorage.getItem('auth') === 'true';
+    const username = localStorage.getItem('user');
+
     const menuRef = useRef(null);
-    const buttonRef = useRef(null); // 🆕 ref para el botón
+    const buttonRef = useRef(null);
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth');
+        navigate('/');
+        if (isMenuOpen) setIsMenuOpen(false);
+        ;
+    };
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -106,19 +118,9 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
-                    }
-                    onClick={() => setIsMenuOpen(false)}
-                >
-                    Inicio
-                </NavLink>
-
-                <NavLink
                     to="/nosotros"
                     className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -135,6 +137,7 @@ const Navbar = () => {
                     Contacto
                 </NavLink>
 
+                {!isAuth ? (
                 <NavLink
                     to="/login"
                     className={({ isActive }) =>
@@ -142,24 +145,79 @@ const Navbar = () => {
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
-                    Administración
+                    Ingresar
                 </NavLink>
+                ) : (
+                <>
+                <NavLink
+                    to={`/perfil/${username}`}
+                    className={({ isActive }) =>
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    Perfil
+                </NavLink>
+                    <NavLink
+                        to="/admin"
+                        className={({ isActive }) =>
+                            `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        }
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        Administración
+                    </NavLink>
+
+                <button
+                    onClick={handleLogout}
+                    className="font-bold py-2 lg:hidden text-left text-cyan-400 hover:text-white"
+                >
+                    Salir
+                </button>
+                </>
+                )}
             </div>
 
             {/* Login + Carrito */}
             <div className="flex justify-end w-1/4 space-x-4">
+            
+                {!isAuth ? (
                 <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
+                        `space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
                     }
                 >
                     <FontAwesomeIcon
-                        icon={faUser}
+                        icon={faRightToBracket}
                         className="w-6 h-6" 
                     />
-                    <span className="hidden lg:inline-block">Administración</span>
+                    <span className="hidden lg:inline-block">Ingresar</span>
                 </NavLink>
+                ) : (
+                <>                    
+                    <NavLink
+                        to={`/perfil/${username}`}
+                        className={({ isActive }) =>
+                            `space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
+                        }
+                    >
+                        <FontAwesomeIcon
+                            icon={faUser}
+                            className="w-6 h-6" 
+                        />
+                        <span className="hidden lg:inline-block">Perfil</span>
+                    </NavLink>
+
+                    <button
+                        onClick={handleLogout}
+                        className="space-x-0 lg:space-x-1 flex items-center font-bold text-cyan-400 hover:text-white bg-transparent border-none cursor-pointer"
+                    >
+                        <FontAwesomeIcon icon={faRightFromBracket} className="w-6 h-6" />
+                        <span className="hidden lg:inline-block">Salir</span>
+                    </button>
+                </>
+                )}
 
                 <NavLink
                     to="/carrito"

@@ -9,7 +9,8 @@ const Field = ({
     placeholder,
     className = "",
     required,
-    rows = 4
+    rows = 4,
+	autoComplete,
 }) => {
     const Component = as;
 
@@ -31,6 +32,7 @@ const Field = ({
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}
+				autoComplete={autoComplete}
                 rows={as === "textarea" ? rows : undefined}
                 className={`w-full border border-zinc-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400 ${className}`}
             />

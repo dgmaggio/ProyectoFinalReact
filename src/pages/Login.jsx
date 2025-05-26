@@ -1,95 +1,25 @@
-import { useState } from 'react';
-import PageHeader from '../components/common/PageHeader';
-import Field from "../components/common/Field";
-import Button from '../components/common/Button';
+import { useNavigate } from "react-router-dom";
+import LoginForm from "../components/user/LoginForm";
+import PageHeader from "../components/common/PageHeader";
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-        usuario: "",
-        password: ""
-    });
+	const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+	const handleLogin = ({ usuario, password }) => {
+		if (usuario && password) {
+			localStorage.setItem("auth", "true");
+			localStorage.setItem("user", usuario);
+			navigate(`/perfil/${usuario}`);
+		}
+	};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
-    };
-
-    return (
-        <section>
-            <PageHeader />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:w-1/2 gap-4 lg:gap-12 mx-auto px-4 lg:px-8 pb-6 lg:pb-12">
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <Field
-                            label="Usuario"
-                            name="usuario"
-                            value={formData.usuario}
-                            onChange={handleChange}
-                            placeholder="Ingresá tu usuario"
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <Field
-                            label="Contraseña"
-                            name="password"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Ingresá tu contraseña"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <Button>
-                            Ingresar
-                        </Button>
-                    </div>
-                </form>
-
-                <ul className="flex flex-col space-y-1 text-sm">
-                    <li>
-                        <Link
-                            to="#"
-                            className="alink"
-                        >
-                            Olvidé mi contraseña
-
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="#"
-                            className="alink"
-                        >
-                            Quiero registrarme
-
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                           to="#"
-                            className="alink"
-                        >
-                            Necesito ayuda
-
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-        </section>
-    );
+	return (
+		<section>
+			<PageHeader title="Iniciar sesión" />
+			
+			<LoginForm onLogin={handleLogin} />
+		</section>
+	);
 };
 
 export default Login;

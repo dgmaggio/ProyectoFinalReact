@@ -11,6 +11,9 @@ import Carrito from './pages/Carrito'
 import Login from './pages/Login'
 import ProductoDetalle from './pages/ProductoDetalle'
 import NotFound from './pages/NotFound'
+import Perfil from './pages/Perfil'
+import Admin from './pages/Admin'
+import PrivateRoute from "./components/common/PrivateRoute";
 import './App.css'
 
 
@@ -28,9 +31,15 @@ function App() {
                     <Route path="/nosotros" element={<Nosotros />} />
                     <Route path="/contacto" element={<Contacto />} />
                     <Route path="/carrito" element={<Carrito />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/productos/:id" element={<ProductoDetalle />} />
+                    <Route path="/login" element={<Login />} />                    
+                    <Route path="/productos/:id" element={<ProductoDetalle />} />                    
                     <Route path="*" element={<NotFound />} />
+
+                    {/* Rutas protegidas */}
+                    <Route element={<PrivateRoute />}>
+                        <Route path="/perfil/:username" element={<Perfil />} />
+                        <Route path="/admin" element={<Admin />} />
+                    </Route>
                 </Routes>
             </main>
             <Footer />
