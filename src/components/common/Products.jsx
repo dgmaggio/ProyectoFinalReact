@@ -2,28 +2,25 @@ import { useEffect, useState } from 'react';
 import Card from '../common/Card';
 import PageHeader from '../common/PageHeader';
 import LoadingMsg from '../common/LoadingMsg';
+import { fetchProducts } from '../../utils/api';
 
 const Products = ({ category }) => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Construir la URL en función de si hay una categoría específica o no
-        const url = category 
-            ? `https://fakestoreapi.com/products/category/${category}`
-            : 'https://fakestoreapi.com/products?limit=18';
-            
-        fetch(url)
-            .then(res => res.json())
+        setLoading(true);
+    
+        fetchProducts(category)
             .then(data => {
                 setProductos(data);
                 setLoading(false);
             })
             .catch(err => {
-                console.error("Error de carga de API", err);
+                console.error("Error al cargar productos", err);
                 setLoading(false);
             });
-    }, [category]); // Importante: incluir category en el array de dependencias
+    }, [category]);
 
     return (
         <section>
