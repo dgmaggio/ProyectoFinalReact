@@ -1,15 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../components/common/PageHeader';
 import LoadingMsg from '../components/common/LoadingMsg';
 import Button from '../components/common/Button';
+import Stepper from "../components/common/Stepper"
 import { formatPrice } from '../utils/formatPrice';
 import toast, { Toaster } from 'react-hot-toast';
+import { CartContext } from '../context/CartContext';
 
 const ProductoDetalle = () => {
     const { id } = useParams();
     const [producto, setProducto] = useState(null);
     const [loading, setLoading] = useState(true);
+    
+    const [cantidad, setCantidad] = useState(1);
+
+    const { agregarAlCarrito } = useContext(CartContext);
+
+    const handleAgregarAlCarrito = () => {        
+        agregarAlCarrito(producto, cantidad);
+        setCantidad(1);
+    };
 
     const notify = () => {
         toast.success(
@@ -61,15 +72,25 @@ const ProductoDetalle = () => {
                 <p className="text-2xl pb-3">{formatPrice(producto.price)}</p>
 
                 <p className="text-sm pb-6">{producto.description}</p>
-                
-                <Button
-                    onClick={notify}
-                    className="w-full"
-                >
-                    Agregar al carrito
-                </Button>
 
-                <Toaster />
+                <div className="flex gap-4">
+                    <Stepper
+                        value={cantidad}
+                        onChange={setCantidad}
+                        min={1}
+                        max={10}
+                    />
+                    
+                    <Button
+                        onClick={() => {
+                            handleAgregarAlCarrito();
+                            notify();
+                        }}
+                        className="w-full"
+                    >
+                        Agregar al carrito
+                    </Button>
+                </div>
             </div>
         </div>
         </section>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { formatPrice } from '../../utils/formatPrice';
 import toast, { Toaster } from 'react-hot-toast';
 
-const Card = ({ producto }) => {
+const Card = ({ producto, agregarAlCarrito }) => {
     
     const notify = () => {
         toast.success(
@@ -15,7 +15,7 @@ const Card = ({ producto }) => {
 
     return (
         <>
-            <div className="border border-zinc-300 bg-white p-4 rounded-md flex flex-col space-x-4 justify-between hover:shadow-lg transition">
+            <div className="border border-zinc-300 bg-white p-4 rounded-xl flex flex-col space-x-4 justify-between hover:shadow-lg transition">
                 <div className="flex md:flex-col">
                     <div className= "w-1/2 h-30 px-4 mb-4 flex items-center justify-center md:w-full md:flex-row">
                         <img
@@ -37,17 +37,18 @@ const Card = ({ producto }) => {
 
                 <div className="flex flex-col space-y-2">
                     <Button
-                        onClick={notify}
+                        onClick={() => {
+                            agregarAlCarrito(producto);
+                            notify();
+                        }}
                         className="w-full text-xs lg:px-0"
                     >
                         Agregar al carrito
                     </Button>
-                    
-                    <Toaster />
 
                     <Link
                         to={`/productos/${producto.id}`}
-                        className="alink text-xs w-full font-semibold pt-2 text-center tracking-wider uppercase"
+                        className="alink text-xs w-full font-semibold pt-2 text-center tracking-wider"
                     >
                         Ver detalle
                     </Link>

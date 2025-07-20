@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound'
 import Perfil from './pages/Perfil'
 import Admin from './pages/Admin'
 import PrivateRoute from "./components/common/PrivateRoute";
+import { Toaster } from 'react-hot-toast';
 import './App.css'
 
 
@@ -22,6 +23,7 @@ function App() {
     return (
         <>
             <Header />
+
             <main>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -30,8 +32,8 @@ function App() {
                     <Route path="/ofertas" element={<Ofertas />} />
                     <Route path="/nosotros" element={<Nosotros />} />
                     <Route path="/contacto" element={<Contacto />} />
+                    <Route path="/login" element={<Login />} />
                     <Route path="/carrito" element={<Carrito />} />
-                    <Route path="/login" element={<Login />} />                    
                     <Route path="/productos/:id" element={<ProductoDetalle />} />                    
                     <Route path="*" element={<NotFound />} />
 
@@ -42,7 +44,10 @@ function App() {
                     </Route>
                 </Routes>
             </main>
+
             <Footer />
+            
+            <Toaster />
         </>
     )
 }

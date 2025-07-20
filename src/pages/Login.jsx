@@ -3,12 +3,13 @@ import LoginForm from "../components/user/LoginForm";
 import PageHeader from "../components/common/PageHeader";
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchUsers } from "../utils/api";
+import { useAuth } from "../context/AuthProvider"; // ← Agregá esto
 
 const Login = () => {
   const navigate = useNavigate();
+  const { loginWithApiUser } = useAuth(); // ← Agregá esto
 
   const handleLogin = async ({ usuario, password }) => {
-    // Validación corregida
     if (!usuario || !password || usuario.trim() === '' || password.trim() === '') {
       toast.error('Por favor, completá todos los campos');
       return;
@@ -21,8 +22,7 @@ const Login = () => {
       );
 
       if (user) {
-        localStorage.setItem("auth", "true");
-        localStorage.setItem("user", usuario);
+        loginWithApiUser(usuario); // ← Usá la nueva función
         navigate(`/perfil/${usuario}`);
       } else {
         toast.error('Usuario o contraseña incorrectos');
@@ -37,7 +37,6 @@ const Login = () => {
     <section>
       <PageHeader title="Iniciar sesión" />
       <LoginForm onLogin={handleLogin} />
-      <Toaster />
     </section>
   );
 };

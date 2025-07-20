@@ -47,6 +47,11 @@ const LoginForm = ({ onLogin }) => {
 					/>
 				</div>
 
+				<div className="text-xs text-red-500 mb-4">
+					User: johnd<br />
+					Password: m38rmF$
+				</div>
+
 				<div>
 					<Button>
 						Ingresar

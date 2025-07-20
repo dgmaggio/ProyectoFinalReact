@@ -1,24 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect, useContext } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/react.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faBars, faCartShopping, faUser, faRightFromBracket, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { CartContext } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthProvider';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     
-    const navigate = useNavigate();
-    const isAuth = localStorage.getItem('auth') === 'true';
-    const username = localStorage.getItem('user');
+    const { cantidadTotal } = useContext(CartContext);
+    const { user, isAuthenticated, logout } = useAuth();
 
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
 
     const handleLogout = () => {
-        localStorage.removeItem('auth');
-        navigate('/');
         if (isMenuOpen) setIsMenuOpen(false);
-        ;
+        logout();
+        
+        // Usar window.location en lugar de navigate para evitar React Router
+        window.location.href = '/';
     };
 
     const toggleMenu = () => {
@@ -80,7 +82,7 @@ const Navbar = () => {
                 <NavLink
                     to="/productos"
                     className={({ isActive }) =>
-                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -90,7 +92,7 @@ const Navbar = () => {
                 <NavLink
                     to="/novedades"
                     className={({ isActive }) =>
-                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -100,7 +102,7 @@ const Navbar = () => {
                 <NavLink
                     to="/ofertas"
                     className={({ isActive }) =>
-                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 border-b-1 lg:border-0 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -108,19 +110,9 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/carrito"
-                    className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden border-b-1 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
-                    }
-                    onClick={() => setIsMenuOpen(false)}
-                >
-                    Carrito
-                </NavLink>
-
-                <NavLink
                     to="/nosotros"
                     className={({ isActive }) =>
-                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -130,18 +122,18 @@ const Navbar = () => {
                 <NavLink
                     to="/contacto"
                     className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden border-b-1 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 lg:hidden border-b-1 border-cyan-900 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
                     Contacto
                 </NavLink>
 
-                {!isAuth ? (
+                {!isAuthenticated() ? (
                 <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
@@ -150,18 +142,18 @@ const Navbar = () => {
                 ) : (
                 <>
                 <NavLink
-                    to={`/perfil/${username}`}
+                    to={`/perfil/${user}`}
                     className={({ isActive }) =>
-                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                        `font-bold py-2 lg:hidden ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                     }
                     onClick={() => setIsMenuOpen(false)}
                 >
-                    Perfil
+                    {user}
                 </NavLink>
                     <NavLink
                         to="/admin"
                         className={({ isActive }) =>
-                            `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-400 hover:text-white'}`
+                            `font-bold py-2 ${isActive ? 'text-white' : 'text-cyan-500 hover:text-white'}`
                         }
                         onClick={() => setIsMenuOpen(false)}
                     >
@@ -170,7 +162,7 @@ const Navbar = () => {
 
                 <button
                     onClick={handleLogout}
-                    className="font-bold py-2 lg:hidden text-left text-cyan-400 hover:text-white"
+                    className="font-bold py-2 lg:hidden text-left text-cyan-500 hover:text-white"
                 >
                     Salir
                 </button>
@@ -181,37 +173,37 @@ const Navbar = () => {
             {/* Login + Carrito */}
             <div className="flex justify-end w-1/4 space-x-4">
             
-                {!isAuth ? (
+                {!isAuthenticated() ? (
                 <NavLink
                     to="/login"
                     className={({ isActive }) =>
-                        `space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
+                        `hidden lg:inline-block space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-500 hover:text-white' : ''}`
                     }
                 >
                     <FontAwesomeIcon
                         icon={faRightToBracket}
                         className="w-6 h-6" 
                     />
-                    <span className="hidden lg:inline-block">Ingresar</span>
+                    <span>Ingresar</span>
                 </NavLink>
                 ) : (
                 <>                    
                     <NavLink
-                        to={`/perfil/${username}`}
+                        to={`/perfil/${user}`}
                         className={({ isActive }) =>
-                            `space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
+                            `hidden lg:inline-block space-x-0 lg:space-x-1 flex items-center font-bold ${!isActive ? 'text-cyan-500 hover:text-white' : ''}`
                         }
                     >
                         <FontAwesomeIcon
                             icon={faUser}
                             className="w-6 h-6" 
                         />
-                        <span className="hidden lg:inline-block">Perfil</span>
+                        <span className="hidden lg:inline-block">{user}</span>
                     </NavLink>
 
                     <button
                         onClick={handleLogout}
-                        className="space-x-0 lg:space-x-1 flex items-center font-bold text-cyan-400 hover:text-white bg-transparent border-none cursor-pointer"
+                        className="hidden lg:inline-block space-x-0 lg:space-x-1 flex items-center font-bold text-cyan-500 hover:text-white bg-transparent border-none cursor-pointer"
                     >
                         <FontAwesomeIcon icon={faRightFromBracket} className="w-6 h-6" />
                         <span className="hidden lg:inline-block">Salir</span>
@@ -221,15 +213,18 @@ const Navbar = () => {
 
                 <NavLink
                     to="/carrito"
-                    className={({ isActive }) =>
-                        `space-x-0 lg:space-x-2 flex items-center font-bold ${!isActive ? 'text-cyan-400 hover:text-white' : ''}`
-                    }
+                    className="space-x-1 flex items-center font-bold text-white"
                 >
                     <FontAwesomeIcon
                         icon={faCartShopping}
                         className="w-6 h-6"
                     />
-                    <span className="hidden lg:inline-block">Carrito</span>
+                    
+                    {cantidadTotal() > 0 && (
+                    <span className="font-bold">
+                        {cantidadTotal()}
+                    </span>
+                    )}
                 </NavLink>
             </div>
         </nav>

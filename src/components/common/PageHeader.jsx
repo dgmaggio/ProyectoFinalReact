@@ -4,14 +4,24 @@ const PageHeader = ({ title = '', noTitle = false }) => {
     const location = useLocation();
     const path = location.pathname;
     
-    const centrarTitulo = !["/", "/productos", "/novedades", "/ofertas"].includes(path);
+    const centrarTitulo = !["/", "/productos", "/novedades", "/ofertas", "/carrito"].includes(path);
 
     const segments = location.pathname
         .split('/')
-        .filter(Boolean); // elimina los vacíos por el primer '/'
+        .filter(Boolean)
+        .filter(segment => segment !== 'perfil'); // omite "perfil" del breadcrumb
 
+    
     const pathLinks = segments.map((segment, index) => {
-        const path = '/' + segments.slice(0, index + 1).join('/');
+        const isProfileRoute = location.pathname.includes('/perfil/');
+        let path;
+        
+        if (isProfileRoute && index === segments.length - 1) {            
+            path = location.pathname;
+        } else {
+            path = '/' + segments.slice(0, index + 1).join('/');
+        }
+        
         return {
             label: segment.charAt(0).toUpperCase() + segment.slice(1),
             path
@@ -21,14 +31,14 @@ const PageHeader = ({ title = '', noTitle = false }) => {
     return (
         <div className={`p-4 lg:p-8 mx-auto ${centrarTitulo ? 'lg:w-1/2 !lg:px-0' : ''}`}>
             <nav className="text-sm text-zinc-400 mb-2">
-                <Link to="/" className="font-bold hover:text-cyan-950 text-cyan-400">Inicio</Link>
+                <Link to="/" className="font-bold hover:text-cyan-950 text-cyan-500">Inicio</Link>
                 {pathLinks.map((item, index) => (
                     <span key={index}>
                         <span className="mx-1"> / </span>
                         {index === pathLinks.length - 1 ? (
                             <span className="text-zinc-500">{index === pathLinks.length - 1 && title ? title : item.label}</span>
                         ) : (
-                            <Link to={item.path} className="font-bold hover:text-cyan-950 text-cyan-400">{item.label}</Link>
+                            <Link to={item.path} className="font-bold hover:text-cyan-950 text-cyan-500">{item.label}</Link>
                         )}
                     </span>
                 ))}

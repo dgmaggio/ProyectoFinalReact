@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 .alink {
-    @apply text-cyan-400 hover:text-cyan-950;
+    @apply text-cyan-500 hover:text-cyan-950;
 }
