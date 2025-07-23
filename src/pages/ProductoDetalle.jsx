@@ -5,8 +5,9 @@ import LoadingMsg from '../components/common/LoadingMsg';
 import Button from '../components/common/Button';
 import Stepper from "../components/common/Stepper"
 import { formatPrice } from '../utils/formatPrice';
-import toast, { Toaster } from 'react-hot-toast';
 import { CartContext } from '../context/CartContext';
+import useToast from '../hooks/useToast';
+import { fetchProductById } from '../utils/api';
 
 const ProductoDetalle = () => {
     const { id } = useParams();
@@ -22,26 +23,23 @@ const ProductoDetalle = () => {
         setCantidad(1);
     };
 
-    const notify = () => {
-        toast.success(
-          <>
-            Se agregó {producto.title.slice(0, 25)}...
-          </>
-        );
-      };
+    const { notifyProductAdded } = useToast();
 
     useEffect(() => {
-        setLoading(true);
-        fetch(`https://fakestoreapi.com/products/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            setProducto(data);
-            setLoading(false);
-        })
-        .catch(err => {
-            console.error('Error loading product:', err);
-            setLoading(false);
-        });
+        const loadProduct = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchProductById(id);
+                setProducto(data);
+            } catch (err) {
+                console.error('Error loading product:', err);
+                setProducto(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        loadProduct();
     }, [id]);
 
     if (loading) return <LoadingMsg />;
@@ -84,7 +82,7 @@ const ProductoDetalle = () => {
                     <Button
                         onClick={() => {
                             handleAgregarAlCarrito();
-                            notify();
+                            notifyProductAdded(producto.title);
                         }}
                         className="w-full"
                     >

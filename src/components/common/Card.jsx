@@ -1,17 +1,12 @@
 import Button from './Button';
 import { Link } from "react-router-dom";
 import { formatPrice } from '../../utils/formatPrice';
-import toast, { Toaster } from 'react-hot-toast';
+import useToast from '../../hooks/useToast';
 
 const Card = ({ producto, agregarAlCarrito }) => {
     
-    const notify = () => {
-        toast.success(
-          <>
-            Se agregó {producto.title.slice(0, 25)}...
-          </>
-        );
-    };
+    const { notifyProductAdded } = useToast();
+
 
     return (
         <>
@@ -39,7 +34,7 @@ const Card = ({ producto, agregarAlCarrito }) => {
                     <Button
                         onClick={() => {
                             agregarAlCarrito(producto);
-                            notify();
+                            notifyProductAdded(producto.title);
                         }}
                         className="w-full text-xs lg:px-0"
                     >

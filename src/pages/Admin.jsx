@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react';
 import PageHeader from '../components/common/PageHeader';
 import ProductsForm from '../components/admin/ProductsForm';
 import ProductsList from '../components/admin/ProductsList';
+import ConfirmationModal from '../components/common/ConfirmationModal';
 import Button from '../components/common/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { createProduct, updateProduct, deleteProduct, fetchProducts } from '../utils/api';
+import useToast from "../hooks/useToast";
+import useConfirmation from "../hooks/useConfirmation";
 
-const Admin = () => {
+const Admin = () => {    
     const [productos, setProductos] = useState([]);
     const [productoAEditar, setProductoAEditar] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+
+    const { notifySuccess, notifyError } = useToast();
+    const { modalProps, confirmDelete } = useConfirmation();
 
     // Cargar productos al montar el componente
     useEffect(() => {
@@ -25,26 +29,21 @@ const Admin = () => {
             const data = await fetchProducts();
             setProductos(data);
         } catch (err) {
-            setError('Error al cargar productos: ' + err.message);
+            notifyError('Error al cargar productos: ' + err.message);
             console.error('Error al cargar productos:', err);
         }
     };
 
     const agregarProducto = async (producto) => {
         setLoading(true);
-        setError('');
-        setSuccess('');
 
         try {
             const nuevoProducto = await createProduct(producto);
             setProductos([...productos, nuevoProducto]);
-            setSuccess('Producto agregado correctamente');
-            setIsModalOpen(false); // Cerrar modal
-            
-            // Limpiar mensaje después de 3 segundos
-            setTimeout(() => setSuccess(''), 3000);
+            notifySuccess('Producto agregado correctamente');
+            setIsModalOpen(false);
         } catch (err) {
-            setError('Error al agregar producto: ' + err.message);
+            notifyError('Error al agregar producto: ' + err.message);
             console.error('Error al agregar producto:', err);
         } finally {
             setLoading(false);
@@ -53,8 +52,6 @@ const Admin = () => {
 
     const actualizarProducto = async (productoActualizado) => {
         setLoading(true);
-        setError('');
-        setSuccess('');
 
         try {
             const productoEditado = await updateProduct(productoActualizado.id, productoActualizado);
@@ -63,13 +60,10 @@ const Admin = () => {
                 p.id === productoActualizado.id ? productoEditado : p
             ));
             setProductoAEditar(null);
-            setIsModalOpen(false); // Cerrar modal
-            setSuccess('Producto actualizado correctamente');
-            
-            // Limpiar mensaje después de 3 segundos
-            setTimeout(() => setSuccess(''), 3000);
+            setIsModalOpen(false);
+            notifySuccess('Producto actualizado correctamente');
         } catch (err) {
-            setError('Error al actualizar producto: ' + err.message);
+            notifyError('Error al actualizar producto: ' + err.message);
             console.error('Error al actualizar producto:', err);
         } finally {
             setLoading(false);
@@ -77,28 +71,28 @@ const Admin = () => {
     };
 
     const borrarProducto = async (id) => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            return;
-        }
+        // Buscar el producto para mostrar su nombre en la confirmación
+        const producto = productos.find(p => p.id === id);
+        const nombreProducto = producto ? producto.title : 'este producto';
 
-        try {
-            await deleteProduct(id);
-            setProductos(productos.filter(p => p.id !== id));
-            
-            // Si estábamos editando el producto eliminado, cancelar edición
-            if (productoAEditar && productoAEditar.id === id) {
-                setProductoAEditar(null);
-                setIsModalOpen(false);
+        // Mostrar modal de confirmación
+        confirmDelete(nombreProducto, async () => {
+            try {
+                await deleteProduct(id);
+                setProductos(productos.filter(p => p.id !== id));
+                
+                // Si estábamos editando el producto eliminado, cancelar edición
+                if (productoAEditar && productoAEditar.id === id) {
+                    setProductoAEditar(null);
+                    setIsModalOpen(false);
+                }
+                
+                notifySuccess('Producto eliminado correctamente');
+            } catch (err) {
+                notifyError('Error al eliminar producto: ' + err.message);
+                console.error('Error al eliminar producto:', err);
             }
-            
-            setSuccess('Producto eliminado correctamente');
-            
-            // Limpiar mensaje después de 3 segundos
-            setTimeout(() => setSuccess(''), 3000);
-        } catch (err) {
-            setError('Error al eliminar producto: ' + err.message);
-            console.error('Error al eliminar producto:', err);
-        }
+        });
     };
 
     const editarProducto = (producto) => {
@@ -115,43 +109,22 @@ const Admin = () => {
         };
         
         setProductoAEditar(productoParaEditar);
-        setIsModalOpen(true); // Abrir modal
-        setError('');
-        setSuccess('');
+        setIsModalOpen(true);
     };
 
     const abrirModalNuevoProducto = () => {
         setProductoAEditar(null);
         setIsModalOpen(true);
-        setError('');
-        setSuccess('');
     };
 
     const cerrarModal = () => {
         setIsModalOpen(false);
         setProductoAEditar(null);
-        setError('');
-        setSuccess('');
     };
 
     return (
         <section>
             <PageHeader />
-            
-            {/* Mensajes de estado */}
-            {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mx-4 lg:mx-8 mb-4">
-                    <span className="font-medium">Error:</span>
-                    <span className="ml-2">{error}</span>
-                </div>
-            )}
-            
-            {success && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mx-4 lg:mx-8 mb-4">
-                    <span className="font-medium">Éxito:</span>
-                    <span className="ml-2">{success}</span>
-                </div>
-            )}
 
             {/* Botón para agregar producto */}
             <div className="px-4 lg:px-8 pb-6">
@@ -176,6 +149,9 @@ const Admin = () => {
                 productoAEditar={productoAEditar}
                 onCancel={cerrarModal}
             />
+
+            {/* Modal de confirmación */}
+            <ConfirmationModal {...modalProps} />
         </section>
     );
 };

@@ -162,8 +162,8 @@ function ProductsFormModal({ isOpen, onSubmit, productoAEditar, onCancel }) {
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header del modal */}
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold">
-            {productoAEditar ? 'Editar Producto' : 'Agregar Nuevo Producto'}
+          <h2 className="text-xl font-bold color-cyan-950">
+            {productoAEditar ? 'Editar producto' : 'Agregar nuevo producto'}
           </h2>
           <button
             onClick={onCancel}
@@ -278,9 +278,9 @@ function ProductsFormModal({ isOpen, onSubmit, productoAEditar, onCancel }) {
             type="button" 
             onClick={onCancel}
             disabled={loading}
-            className="text-gray-500 hover:text-gray-700 cursor-pointer px-4 py-2"
+            className="px-4 py-2 hover:bg-gray-200 font-medium disabled:opacity-50 cursor-pointer rounded"
           >
-            <FontAwesomeIcon icon={faTimes} /> Cancelar
+            Cancelar
           </button>
           
           <Button 
@@ -288,8 +288,7 @@ function ProductsFormModal({ isOpen, onSubmit, productoAEditar, onCancel }) {
             disabled={loading}
             onClick={handleSubmit}
           >
-            <FontAwesomeIcon icon={faPlus} /> 
-            {loading ? 'Guardando...' : (productoAEditar ? 'Actualizar' : 'Agregar')}
+            <FontAwesomeIcon icon={faPlus} /> {loading ? 'Guardando...' : (productoAEditar ? 'Actualizar' : 'Agregar')}
           </Button>
         </div>
       </div>

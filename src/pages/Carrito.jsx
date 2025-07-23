@@ -7,18 +7,22 @@ import { formatPrice } from '../utils/formatPrice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { CartContext } from '../context/CartContext';
-import toast, { Toaster } from 'react-hot-toast';
+import useToast from '../hooks/useToast';
+import ConfirmationModal from '../components/common/ConfirmationModal';
+import useConfirmation from '../hooks/useConfirmation';
 
 const Carrito = () => {
 	const { carrito, eliminarDelCarrito, actualizarCantidad, obtenerTotal, cantidadTotal, vaciarCarrito } = useContext(CartContext);
+	
+	const { notifySuccess, notifyProductRemoved } = useToast();
+    const { modalProps, confirmClearCart } = useConfirmation();
 
-	const notify = (title) => {
-        toast.error(
-          <>
-            Se eliminó {title.slice(0, 25)}...
-          </>
-        );
-    };
+	const handleVaciarCarrito = () => {
+		confirmClearCart(() => {
+		  vaciarCarrito();
+		  notifySuccess('Carrito vaciado correctamente');
+		});
+	};
 
 	if (carrito.length === 0) {
 		return (
@@ -76,7 +80,7 @@ const Carrito = () => {
 									<button 
 										onClick={() => {
 											eliminarDelCarrito(item.id)											
-											notify(item.title);
+											notifyProductRemoved(item.title);
 										}}
 										className="text-red-400 hover:text-red-600 cursor-pointer"
 									>
@@ -121,7 +125,7 @@ const Carrito = () => {
 						</div>
 
 						<button
-							onClick={vaciarCarrito}
+							onClick={handleVaciarCarrito}
 							className="block mx-auto mt-4 text-red-400 hover:text-red-600 font-semibold cursor-pointer"
 						>
 							Vaciar carrito
@@ -130,7 +134,9 @@ const Carrito = () => {
 					</div>
 				</div>
 
-			</div>			
+			</div>
+			
+			<ConfirmationModal {...modalProps} />
 		</section>
 	);
 };

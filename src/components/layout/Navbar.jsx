@@ -187,7 +187,7 @@ const Navbar = () => {
                     <span>Ingresar</span>
                 </NavLink>
                 ) : (
-                <>                    
+                <>  
                     <NavLink
                         to={`/perfil/${user}`}
                         className={({ isActive }) =>
