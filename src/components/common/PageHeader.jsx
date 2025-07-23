@@ -4,7 +4,7 @@ const PageHeader = ({ title = '', noTitle = false }) => {
     const location = useLocation();
     const path = location.pathname;
     
-    const centrarTitulo = !["/", "/productos", "/novedades", "/ofertas", "/carrito"].includes(path);
+    const centrarTitulo = !["/", "/productos", "/novedades", "/ofertas", "/carrito", "/admin"].includes(path);
 
     const segments = location.pathname
         .split('/')

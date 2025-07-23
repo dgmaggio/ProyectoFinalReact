@@ -8,51 +8,25 @@ import { CartContext } from '../../context/CartContext';
 const Products = ({ category }) => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     const { agregarAlCarrito } = useContext(CartContext);
 
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
-            
-            // Crear clave única para localStorage basada en categoría
-            const storageKey = category ? `products_${category}` : 'products_all';
+            setError('');
             
             try {
-                // Intentar obtener productos del localStorage
-                const storedProducts = localStorage.getItem(storageKey);
-                
-                if (storedProducts) {
-                    // Si existen en localStorage, usarlos directamente
-                    const parsedProducts = JSON.parse(storedProducts);
-                    setProductos(parsedProducts);
-                    setLoading(false);
-                    console.log(`Productos cargados desde localStorage (${storageKey})`);
-                } else {
-                    // Si no existen, obtener de la API
-                    console.log(`Obteniendo productos de la API (${storageKey})`);
-                    const data = await fetchProducts(category);
-                    
-                    // Guardar en localStorage
-                    localStorage.setItem(storageKey, JSON.stringify(data));
-                    
-                    setProductos(data);
-                    setLoading(false);
-                    console.log(`Productos guardados en localStorage (${storageKey})`);
-                }
+                // Usar directamente fetchProducts que ya tiene cache incluido
+                const data = await fetchProducts(category);
+                setProductos(data);
+                console.log(`${data.length} productos cargados${category ? ` (categoría: ${category})` : ''}`);
             } catch (err) {
                 console.error("Error al cargar productos:", err);
-                
-                // En caso de error, intentar cargar desde localStorage como fallback
-                const storedProducts = localStorage.getItem(storageKey);
-                if (storedProducts) {
-                    const parsedProducts = JSON.parse(storedProducts);
-                    setProductos(parsedProducts);
-                    console.log("Usando productos del localStorage como fallback");
-                } else {
-                    setProductos([]);
-                }
-                
+                setError('Error al cargar productos');
+                setProductos([]);
+            } finally {
                 setLoading(false);
             }
         };
@@ -60,41 +34,46 @@ const Products = ({ category }) => {
         loadProducts();
     }, [category]);
 
-    // Función para limpiar cache (opcional - para testing o actualizar datos)
-    const clearCache = () => {
-        const storageKey = category ? `products_${category}` : 'products_all';
-        localStorage.removeItem(storageKey);
-        console.log(`Cache limpiado para ${storageKey}`);
-        
-        // Recargar productos desde API
-        const loadProducts = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchProducts(category);
-                localStorage.setItem(storageKey, JSON.stringify(data));
-                setProductos(data);
-            } catch (err) {
-                console.error("Error al recargar productos:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadProducts();
-    };
+    if (loading) {
+        return (
+            <section>
+                <PageHeader />
+                <LoadingMsg />
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section>
+                <PageHeader />
+                <div className="text-center py-8">
+                    <p className="text-red-500">{error}</p>
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Reintentar
+                    </button>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section>
             <PageHeader />
-
-            {loading ? (
-                <LoadingMsg />
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-4 bg-gray-100 px-4 lg:px-8 py-6 lg:py-12 border-t-1 border-gray-300">
-                    {productos.map((producto) => (
+            <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-4 bg-gray-100 px-4 lg:px-8 py-6 lg:py-12 border-t-1 border-gray-300">
+                {productos.length > 0 ? (
+                    productos.map((producto) => (
                         <Card key={producto.id} producto={producto} agregarAlCarrito={agregarAlCarrito} />
-                    ))}
-                </div>
-            )}
+                    ))
+                ) : (
+                    <div className="col-span-full text-center py-8">
+                        <p className="text-gray-500">No hay productos disponibles</p>
+                    </div>
+                )}
+            </div>
         </section>
     );
 };

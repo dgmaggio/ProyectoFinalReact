@@ -15,7 +15,7 @@ const Field = ({
     const Component = as;
 
     return (
-        <div className="mb-4">
+        <div>
             {label && (
                 <label
                     htmlFor={id || name}
