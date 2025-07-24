@@ -3,16 +3,18 @@ import { useParams, Navigate } from "react-router-dom";
 import PageHeader from "../components/common/PageHeader";
 import LoadingMsg from "../components/common/LoadingMsg";
 import { fetchUsers } from "../utils/api";
+import { useAuth } from "../context/AuthProvider";
+import SEO from '../components/common/SEO';
 
 const Perfil = () => {
 	const { username } = useParams();
-	const isAuth = localStorage.getItem("auth") === "true";
+	const { isAuthenticated, loading: authLoading } = useAuth();
 	const [usuario, setUsuario] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const loadUserData = async () => {
-			if (!isAuth) return;
+			if (!isAuthenticated()) return;
 
 			try {
 				const users = await fetchUsers();
@@ -24,44 +26,68 @@ const Perfil = () => {
 				setLoading(false);
 			}
 		};
-
-		loadUserData();
-	}, [username, isAuth]);
-
-	if (!isAuth) return <Navigate to="/login" />;
+		
+		if (!authLoading) {
+			loadUserData();
+		}
+	}, [username, isAuthenticated, authLoading]); 
+	
+	if (authLoading) return <LoadingMsg />;
+	
+	if (!isAuthenticated()) return <Navigate to="/login" />;
+	
 	if (loading) return <LoadingMsg />;
 
 	return (
-		<section>
-			<PageHeader />
-			<div className="max-w-2xl mx-auto p-4">
-				<h1>¡Bienvenido, {usuario?.name?.firstname} {usuario?.name?.lastname}!</h1>
-				
-				<label>Nombre</label>
-				<p>{usuario?.name?.firstname} {usuario?.name?.lastname}</p>
+		<>
+			<SEO 
+				title={`${usuario?.name?.firstname} ${usuario?.name?.lastname} - Mi Perfil`}
+				description={`Perfil personal de ${usuario?.name?.firstname}. Email: ${usuario?.email}. Miembro desde ${new Date().getFullYear()}.`}
+				// ...
+			/>
+			
+			<section>
+				<PageHeader />
 
-				<label>Email</label>
-				<p>{usuario?.email}</p>
+				<div className="lg:w-1/2 mx-auto px-4 lg:px-8 pb-6 lg:pb-12 flex flex-col gap-4">
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Nombre</label>
+						<span className='capitalize'>{usuario?.name?.firstname} {usuario?.name?.lastname}</span>
+					</div>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Email</label>
+						<p>{usuario?.email}</p>
+					</div>
 
-				<label>Teléfono</label>
-				<p>{usuario?.phone}</p>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Teléfono</label>
+						<p>{usuario?.phone}</p>
+					</div>
 
-				<label>Usuario</label>
-				<p>@{usuario?.username}</p>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Usuario</label>
+						<p>@{usuario?.username}</p>
+					</div>
 
-				<label>Calle</label>
-				<p>{usuario?.address?.street} {usuario?.address?.number}</p>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Calle</label>
+						<p>{usuario?.address?.street} {usuario?.address?.number}</p>
+					</div>
 
-				<label>Ciudad</label>
-				<p>{usuario?.address?.city}</p>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Ciudad</label>
+						<p>{usuario?.address?.city}</p>
+					</div>
 
-				<label>Código Postal</label>
-				<p>{usuario?.address?.zipcode}</p>
+					<div className='flex gap-2'>
+						<label className='font-bold inline-block w-28'>Código Postal</label>
+						<p>{usuario?.address?.zipcode}</p>
+					</div>
 
-				<label>ID de Usuario</label>
-				<p>#{usuario?.id}</p>
-			</div>
-		</section>
+				</div>
+			</section>
+			
+		</>
 	);
 };
 

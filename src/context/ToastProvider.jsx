@@ -1,4 +1,3 @@
-// components/common/ToastProvider.jsx
 import { Toaster } from 'react-hot-toast';
 
 const ToastProvider = () => {
@@ -10,13 +9,13 @@ const ToastProvider = () => {
       containerClassName=""
       containerStyle={{}}
       toastOptions={{
-        // Configuración por defecto para todos los toasts
-        duration: 4000,
+        // Configuración general
+        duration: 3000,
         style: {
           background: '#fff',
           color: '#363636',
         },
-        // Configuración específica por tipo
+        // Configuración específica
         success: {
           duration: 3000,
           theme: {
@@ -24,7 +23,7 @@ const ToastProvider = () => {
           },
         },
         error: {
-          duration: 4000,
+          duration: 3000,
           theme: {
             primary: '#ff6b6b',
           },

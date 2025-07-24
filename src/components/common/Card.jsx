@@ -36,6 +36,7 @@ const Card = ({ producto, agregarAlCarrito }) => {
                             agregarAlCarrito(producto);
                             notifyProductAdded(producto.title);
                         }}
+                        ariaLabel={`Agregar ${producto.title} al carrito`}
                         className="w-full text-xs lg:px-0"
                     >
                         Agregar al carrito

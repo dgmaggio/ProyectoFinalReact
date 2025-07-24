@@ -4,6 +4,7 @@ import PageHeader from '../common/PageHeader';
 import LoadingMsg from '../common/LoadingMsg';
 import { fetchProducts } from '../../utils/api';
 import { CartContext } from '../../context/CartContext';
+import SEO from './SEO';
 
 const Products = ({ category }) => {
     const [productos, setProductos] = useState([]);
@@ -61,20 +62,29 @@ const Products = ({ category }) => {
     }
 
     return (
-        <section>
-            <PageHeader />
-            <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-4 bg-gray-100 px-4 lg:px-8 py-6 lg:py-12 border-t-1 border-gray-300">
-                {productos.length > 0 ? (
-                    productos.map((producto) => (
-                        <Card key={producto.id} producto={producto} agregarAlCarrito={agregarAlCarrito} />
-                    ))
-                ) : (
-                    <div className="col-span-full text-center py-8">
-                        <p className="text-gray-500">No hay productos disponibles</p>
-                    </div>
-                )}
-            </div>
-        </section>
+        <>
+            <SEO 
+                // title={category ? `${category} | Todos los productos` : `Todos los productos`}
+                title="Todos los productos"
+                description="Explorá nuestra amplia selección de productos de calidad"
+                keywords="productos, tienda, comprar online"
+            />
+
+            <section>
+                <PageHeader />
+                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6 gap-4 bg-gray-100 px-4 lg:px-8 py-6 lg:py-12 border-t-1 border-gray-300">
+                    {productos.length > 0 ? (
+                        productos.map((producto) => (
+                            <Card key={producto.id} producto={producto} agregarAlCarrito={agregarAlCarrito} />
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-8">
+                            <p className="text-gray-500">No hay productos disponibles</p>
+                        </div>
+                    )}
+                </div>
+            </section>
+        </>
     );
 };
 

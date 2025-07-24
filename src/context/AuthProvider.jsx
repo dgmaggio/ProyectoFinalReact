@@ -2,29 +2,38 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 
 export function AuthProvider({ children }) {
-	const [token, setToken] = useState(null);
-	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(true);
+	// 📚 ESTADO: La "fuente de verdad" para saber si el usuario está logueado
+	const [token, setToken] = useState(null);     // Para verificar autenticación
+	const [user, setUser] = useState(null);       // Para mostrar datos del usuario
+	const [loading, setLoading] = useState(true); // Para evitar redirects prematuros
 
+	// 🔄 INICIALIZACIÓN: Al cargar la app, recuperar sesión guardada
 	useEffect(() => {
 		const initializeAuth = () => {
 			try {
+				// Leer datos guardados del navegador
 				const savedToken = localStorage.getItem("token");
 				const savedUser = localStorage.getItem("user");
 				
-				// Verificar que existan y no sean strings vacíos o 'null'
+				// ✅ VERIFICACIÓN ROBUSTA: Asegurar que los datos existan y sean válidos
 				if (savedToken && savedUser && 
 					savedToken !== 'null' && savedUser !== 'null' &&
 					savedToken.trim() !== '' && savedUser.trim() !== '') {
+					
+					// Restaurar el estado de la sesión
 					setToken(savedToken);
 					setUser(savedUser);
+					console.log('✅ Sesión restaurada para:', savedUser);
+				} else {
+					console.log('❌ No hay sesión guardada o datos inválidos');
 				}
 			} catch (error) {
-				console.error('Error inicializando autenticación:', error);
-				// Limpiar localStorage corrupto
+				console.error('❌ Error leyendo localStorage:', error);
+				// 🧹 LIMPIEZA: Si hay datos corruptos, eliminarlos
 				localStorage.removeItem("token");
 				localStorage.removeItem("user");
 			} finally {
+				// ⚠️ IMPORTANTE: Siempre marcar como "terminado de cargar"
 				setLoading(false);
 			}
 		};
@@ -32,37 +41,63 @@ export function AuthProvider({ children }) {
 		initializeAuth();
 	}, []);
 
-	// Esta función es la que usa tu Login.jsx después de validar con fetchUsers()
+	// 🔐 LOGIN: Cuando el usuario se autentica exitosamente
 	const loginWithApiUser = (username) => {
-		const token = "api_user_token_" + Date.now(); // Token único
-		setToken(token);
+		// Generar un token único para esta sesión
+		const authToken = `user_${username}_${Date.now()}`;
+		
+		// 📝 ACTUALIZAR ESTADO: Esta es la "fuente de verdad"
+		setToken(authToken);
 		setUser(username);
-		localStorage.setItem("token", token);
+		
+		// 💾 PERSISTIR: Guardar en localStorage para mantener sesión entre recargas
+		localStorage.setItem("token", authToken);
 		localStorage.setItem("user", username);
-		localStorage.setItem("auth", "true");
+		
+		console.log('✅ Usuario logueado:', username);
 	};
 
+	// 🚪 LOGOUT: Limpiar completamente la sesión
 	const logout = () => {
+		// 🧹 LIMPIAR ESTADO
 		setToken(null);
 		setUser(null);
+		
+		// 🧹 LIMPIAR PERSISTENCIA
 		localStorage.removeItem("token");
 		localStorage.removeItem("user");
-		localStorage.removeItem("auth");
+		
+		console.log('✅ Sesión cerrada');
 	};
 
+	// ✅ VERIFICACIÓN: ¿El usuario está autenticado?
 	const isAuthenticated = () => {
-		return !!(token && user && token !== 'null' && user !== 'null');
+		// 🎯 BUENA PRÁCTICA: Verificar el ESTADO, no localStorage directamente
+		// Esto es más rápido y es la "fuente de verdad"
+		const hasValidSession = !!(token && user && token !== 'null' && user !== 'null');
+		
+		console.log('🔍 Verificando autenticación:', {
+			token: !!token,
+			user: !!user,
+			result: hasValidSession
+		});
+		
+		return hasValidSession;
 	};
 
+	// 📡 PROVIDER: Compartir funciones y estado con toda la app
 	return (
 		<AuthContext.Provider
 			value={{
-				token,
-				user,
-				logout,
-				loginWithApiUser,
-				isAuthenticated,
-				loading,
+				// 📊 ESTADO
+				token,      // Para verificaciones adicionales si se necesitan
+				user,       // Para mostrar nombre de usuario, perfil, etc.
+				loading,    // Para que PrivateRoute sepa cuándo puede verificar
+				
+				// 🔧 FUNCIONES
+				loginWithApiUser,  // Para Login.jsx
+				logout,           // Para botones de cerrar sesión
+				isAuthenticated,  // Para PrivateRoute y verificaciones
 			}}
 		>
 			{children}

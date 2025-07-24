@@ -125,7 +125,12 @@ const Footer = () => {
 
                         <p>
                             Diseño y Desarrollo:<br/>
-                            Diego Maggio
+                            <Link
+                                to="https://www.linkedin.com/in/dgmaggio/"
+                                className="alink"
+                            >
+                                Diego Maggio
+                            </Link>
                         </p>
                     </div>
                 </div>
