@@ -9,7 +9,7 @@ const PageHeader = ({ title = '', noTitle = false }) => {
     const segments = location.pathname
         .split('/')
         .filter(Boolean)
-        .filter(segment => segment !== 'perfil'); // omite "perfil" del breadcrumb
+        .filter(segment => segment !== 'perfil');
 
     
     const pathLinks = segments.map((segment, index) => {

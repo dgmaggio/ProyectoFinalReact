@@ -16,11 +16,11 @@ const Nosotros = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:w-1/2 gap-4 lg:gap-12 mx-auto px-4 lg:px-8 pb-6 lg:pb-12">
                     <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam suscipit augue ac tortor blandit porttitor. Curabitur hendrerit et sapien at vehicula. Integer sit amet ante quam. Nam vulputate ex eget dignissim fringilla. Maecenas sed vehicula libero, nec malesuada purus. Pellentesque quis augue pretium lacus lacinia imperdiet. Phasellus nulla purus, venenatis et elementum nec, iaculis eu lorem. Ut rhoncus nibh quis purus aliquam, id lobortis urna aliquam. In a interdum tellus, vel dapibus lacus.
+                        En <strong>Proyecto Final</strong>, nuestra misión es simplificar y enriquecer tu experiencia de compra. Comprendemos que la vida moderna exige flexibilidad y acceso a una amplia gama de productos, por eso hemos creado un espacio donde la diversidad se encuentra con la conveniencia. Nos esforzamos por ser tu destino único para todo lo que necesitas, desde los artículos esenciales del día a día hasta esas pequeñas indulgencias que hacen la vida más placentera, todo cuidadosamente seleccionado para garantizar calidad y valor.
                     </div>
 
                     <div>
-                        Morbi efficitur justo in risus lobortis, vel ultrices quam auctor. Sed eget sapien sit amet lectus semper aliquet vitae eget lectus. Duis a porttitor dui, vel sagittis nunc. Donec et venenatis massa. Nunc at purus vitae sapien scelerisque dictum. Aenean ex lectus, interdum sed sagittis at, auctor gravida felis. Cras magna ligula, consequat ut mollis posuere, euismod vel velit. Donec rhoncus nunc diam. Fusce nec laoreet massa. Ut enim sapien, posuere vitae viverra et, sodales in diam. Fusce ultrices lorem a ligula commodo.
+                        La esencia de nuestra tienda radica en <strong>la variedad y la accesibilidad</strong>. Recorremos incansablemente el mercado para traerte una colección ecléctica de productos que abarca múltiples categorías: hogar, tecnología, moda, bienestar, ocio y mucho más. Cada artículo en nuestras estanterías y en nuestra plataforma ha sido elegido pensando en las necesidades y los deseos de nuestros clientes, asegurando que siempre encuentres opciones que se adapten a tu estilo de vida, preferencias y presupuesto.
                     </div>
                 </div>
             </section>

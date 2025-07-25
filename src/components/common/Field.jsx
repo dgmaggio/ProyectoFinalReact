@@ -20,7 +20,6 @@ const Field = ({
     const errorId = error ? `${fieldId}-error` : undefined;
     const helpId = helpText ? `${fieldId}-help` : undefined;
     
-    // Construir aria-describedby dinámicamente
     const describedBy = [errorId, helpId].filter(Boolean).join(' ') || undefined;
 
     return (
@@ -62,8 +61,7 @@ const Field = ({
                 } ${className}`}
                 {...props}
             />
-            
-            {/* Texto de ayuda */}
+    
             {helpText && (
                 <div 
                     id={helpId}
@@ -73,7 +71,6 @@ const Field = ({
                 </div>
             )}
             
-            {/* Mensaje de error */}
             {error && (
                 <div 
                     id={errorId}

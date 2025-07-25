@@ -17,13 +17,11 @@ const ConfirmationModal = ({
 }) => {
 
   const handleOverlayClick = (e) => {
-    // Solo cerrar si se hace click en el overlay, no en el contenido del modal
     if (e.target === e.currentTarget && !loading) {
       onCancel();
     }
   };
-
-  // Manejar tecla Escape
+  
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && isOpen && !loading) {
@@ -33,7 +31,6 @@ const ConfirmationModal = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      // Prevenir scroll del body cuando el modal está abierto
       document.body.style.overflow = 'hidden';
     }
 
@@ -43,7 +40,6 @@ const ConfirmationModal = ({
     };
   }, [isOpen, onCancel, loading]);
 
-  // Configuración de colores y estilos según el tipo
   const getTypeConfig = () => {
     switch (type) {
       case 'danger':
@@ -68,8 +64,7 @@ const ConfirmationModal = ({
     }
   };
 
-  // No renderizar nada si el modal está cerrado
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
   const typeConfig = getTypeConfig();
   const displayIcon = icon || typeConfig.defaultIcon;
@@ -81,7 +76,6 @@ const ConfirmationModal = ({
       onClick={handleOverlayClick}
     >
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-        {/* Header del modal */}
         <div className="flex justify-between items-center p-6 border-b border-gray-300">
           <div className="flex items-center gap-3">
             <FontAwesomeIcon 
@@ -101,14 +95,12 @@ const ConfirmationModal = ({
           </button>
         </div>
 
-        {/* Contenido del modal */}
         <div className="p-6">
           <p className="leading-relaxed">
             {message}
           </p>
         </div>
 
-        {/* Footer del modal con botones */}
         <div className="flex justify-end gap-3 p-6 border-t border-gray-300">
           <button
             type="button"

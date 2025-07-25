@@ -64,7 +64,7 @@ const Stepper = ({
                         : 'text-gray-400 cursor-not-allowed'
                 }`}
             >
-                −
+                -
             </button>
             
 			<span 

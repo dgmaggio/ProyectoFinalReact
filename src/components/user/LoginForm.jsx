@@ -16,7 +16,7 @@ const LoginForm = ({ onLogin }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		onLogin(formData); // Lógica en Login.jsx
+		onLogin(formData);
 	};
 
     return (

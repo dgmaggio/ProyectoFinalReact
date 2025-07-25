@@ -15,7 +15,7 @@ const SEO = ({
         <Helmet>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta name="theme-color" content="#00b8db" />
-            {/* Basic Meta Tags */}
+            {/* Meta tags básicos */}
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords} />
@@ -33,7 +33,7 @@ const SEO = ({
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={image} />
             
-            {/* Canonical URL */}
+            {/* URL canónica */}
             <link rel="canonical" href={url} />
         </Helmet>
     );

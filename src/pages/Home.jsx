@@ -1,4 +1,6 @@
 import ButtonLink from '../components/common/ButtonLink';
+import InfoCards from '../components/common/InfoCards';
+import FeaturedProducts from '../components/common/FeaturedProducts';
 import SEO from '../components/common/SEO';
 
 const Home = () => {
@@ -69,6 +71,11 @@ const Home = () => {
             </div>
 
         </section>
+
+        <InfoCards />
+        
+        <FeaturedProducts />
+        
     </>
   );
 };

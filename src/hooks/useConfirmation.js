@@ -34,27 +34,22 @@ const useConfirmation = () => {
     setLoading(true);
     try {
       await config.onConfirm();
-      // Cerrar modal después de confirmar
       setIsOpen(false);
       setLoading(false);
     } catch (error) {
       console.error('Error en confirmación:', error);
       setLoading(false);
-      // No cerrar el modal si hay error para que el usuario vea el problema
     }
   };
 
   const handleCancel = () => {
-    // Ejecutar callback personalizado si existe
     if (config.onCancel) {
       config.onCancel();
     }
-    // SIEMPRE cerrar el modal
     setIsOpen(false);
     setLoading(false);
   };
 
-  // Funciones predefinidas para casos comunes
   const confirmDelete = (itemName, onConfirm) => {
     showConfirmation({
       title: "Eliminar producto",
@@ -63,7 +58,6 @@ const useConfirmation = () => {
       cancelText: "Cancelar",
       type: "danger",
       onConfirm
-      // No pasamos onCancel para que use el handleCancel por defecto
     });
   };
 
@@ -90,22 +84,19 @@ const useConfirmation = () => {
   };
 
   return {
-    // Props para el modal
     modalProps: {
       isOpen,
       loading,
-      ...config,  // ← Primero el config
-      onConfirm: handleConfirm,  // ← Después las funciones (para que no se sobrescriban)
+      ...config,
+      onConfirm: handleConfirm,
       onCancel: handleCancel,
     },
     
-    // Funciones para mostrar confirmaciones
     showConfirmation,
     confirmDelete,
     confirmClearCart,
     confirmLogout,
     
-    // Control manual
     closeModal: () => setIsOpen(false)
   };
 };

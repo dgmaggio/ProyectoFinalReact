@@ -43,7 +43,6 @@ const Perfil = () => {
 			<SEO 
 				title={`${usuario?.name?.firstname} ${usuario?.name?.lastname} - Mi Perfil`}
 				description={`Perfil personal de ${usuario?.name?.firstname}. Email: ${usuario?.email}. Miembro desde ${new Date().getFullYear()}.`}
-				// ...
 			/>
 			
 			<section>

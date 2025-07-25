@@ -6,7 +6,7 @@ const Button = ({
     disabled = false,
     ariaLabel,
     ariaDescribedBy,
-    ariaPressed, // Para botones toggle
+    ariaPressed,
     ...props
 }) => {
     return (

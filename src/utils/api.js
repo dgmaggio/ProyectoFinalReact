@@ -1,10 +1,10 @@
 // Configuración de MockAPI
 const API_URL = 'https://68804988f1dcae717b617ffd.mockapi.io/api';
 
-// Configuración de cache
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 horas en millisegundos
+// Configuración de cache 24 horas
+const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
-// Función para obtener datos del cache
+// Obtener datos del cache
 function getCachedData(key) {
     try {
         const cachedItem = localStorage.getItem(key);
@@ -13,7 +13,7 @@ function getCachedData(key) {
         const { data, timestamp } = JSON.parse(cachedItem);
         const now = Date.now();
 
-        // Verificar si el cache ha expirado
+        // Verificar si el cache expiró
         if (now - timestamp > CACHE_DURATION) {
             localStorage.removeItem(key);
             return null;
@@ -26,7 +26,6 @@ function getCachedData(key) {
     }
 }
 
-// Función para guardar datos en el cache
 function setCachedData(key, data) {
     try {
         const cacheItem = {
@@ -39,23 +38,15 @@ function setCachedData(key, data) {
     }
 }
 
-// FUNCIONES DE LECTURA (READ)
-
 export async function fetchProducts(category = null, limit = null) {
-    // Crear clave única para el cache
     const cacheKey = category 
         ? `products_cache_${category}` 
         : `products_cache_all${limit ? `_${limit}` : ''}`;
 
-    // Intentar obtener del cache primero
     const cachedProducts = getCachedData(cacheKey);
     if (cachedProducts) {
-        console.log(`Productos obtenidos del cache: ${cacheKey}`);
         return cachedProducts;
     }
-
-    // Si no hay cache, obtener de MockAPI
-    console.log(`Obteniendo productos de MockAPI: ${cacheKey}`);
     
     try {
         const response = await fetch(`${API_URL}/products`);
@@ -66,7 +57,6 @@ export async function fetchProducts(category = null, limit = null) {
 
         let data = await response.json();
         
-        // Aplicar filtros si se especificaron
         if (category) {
             data = data.filter(product => product.category === category);
         }
@@ -75,9 +65,7 @@ export async function fetchProducts(category = null, limit = null) {
             data = data.slice(0, limit);
         }
         
-        // Guardar en cache para futuras consultas
         setCachedData(cacheKey, data);
-        console.log(`Productos guardados en cache: ${cacheKey}`);
 
         return data;
     } catch (error) {
@@ -89,10 +77,8 @@ export async function fetchProducts(category = null, limit = null) {
 export async function fetchProductById(productId) {
     const cacheKey = `product_${productId}_cache`;
     
-    // Intentar obtener del cache
     const cachedProduct = getCachedData(cacheKey);
     if (cachedProduct) {
-        console.log(`Producto ${productId} obtenido del cache`);
         return cachedProduct;
     }
 
@@ -105,9 +91,7 @@ export async function fetchProductById(productId) {
 
         const product = await response.json();
         
-        // Guardar en cache
-        setCachedData(cacheKey, product);
-        console.log(`Producto ${productId} guardado en cache`);
+        setCachedData(cacheKey, product);        
         
         return product;
     } catch (error) {
@@ -115,8 +99,6 @@ export async function fetchProductById(productId) {
         throw error;
     }
 }
-
-// FUNCIONES DE ESCRITURA (CREATE, UPDATE, DELETE)
 
 export async function createProduct(productData) {
     try {
@@ -130,7 +112,8 @@ export async function createProduct(productData) {
                 price: Number(productData.precio || productData.price),
                 description: productData.description || 'Producto creado desde admin',
                 image: productData.image || 'https://fakestoreapi.com/img/placeholder.jpg',
-                category: productData.category || 'electronics'
+                category: productData.category || 'electronics',
+                featured: productData.featured || false
             })
         });
 
@@ -140,9 +123,7 @@ export async function createProduct(productData) {
 
         const newProduct = await response.json();
         
-        // Limpiar cache para que se actualice la lista
         clearAllCache();
-        console.log('Producto creado exitosamente:', newProduct);
         
         return newProduct;
     } catch (error) {
@@ -163,7 +144,8 @@ export async function updateProduct(productId, productData) {
                 price: Number(productData.precio || productData.price),
                 description: productData.description,
                 image: productData.image,
-                category: productData.category
+                category: productData.category,
+                featured: productData.featured || false
             })
         });
 
@@ -173,9 +155,7 @@ export async function updateProduct(productId, productData) {
 
         const updatedProduct = await response.json();
         
-        // Limpiar cache para que se actualice la lista
         clearAllCache();
-        console.log('Producto actualizado exitosamente:', updatedProduct);
         
         return updatedProduct;
     } catch (error) {
@@ -196,9 +176,7 @@ export async function deleteProduct(productId) {
 
         const result = await response.json();
         
-        // Limpiar cache para que se actualice la lista
         clearAllCache();
-        console.log('Producto eliminado exitosamente:', productId);
         
         return result;
     } catch (error) {
@@ -207,29 +185,21 @@ export async function deleteProduct(productId) {
     }
 }
 
-// FUNCIONES PARA USUARIOS (manteniendo FakeStore por ahora)
-
 export async function fetchUsers() {
     const cacheKey = 'users_cache';
     
-    // Intentar obtener del cache
     const cachedUsers = getCachedData(cacheKey);
     if (cachedUsers) {
-        console.log('Usuarios obtenidos del cache');
         return cachedUsers;
     }
 
     try {
-        // Obtener de FakeStore API (puedes migrar esto después si quieres)
-        console.log('Obteniendo usuarios de FakeStore API');
         const response = await fetch('https://fakestoreapi.com/users');
         if (!response.ok) throw new Error('Error al obtener usuarios');
         
         const data = await response.json();
         
-        // Guardar en cache
         setCachedData(cacheKey, data);
-        console.log('Usuarios guardados en cache');
         
         return data;
     } catch (error) {
@@ -244,8 +214,6 @@ export async function loginUser(username, password) {
     return user || null;
 }
 
-// FUNCIONES DE CACHE
-
 export function clearAllCache() {
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
@@ -253,7 +221,6 @@ export function clearAllCache() {
             localStorage.removeItem(key);
         }
     });
-    console.log('Todo el cache ha sido limpiado');
 }
 
 export function clearCacheFor(category = null) {
@@ -262,10 +229,8 @@ export function clearCacheFor(category = null) {
         : 'products_cache_all';
     
     localStorage.removeItem(cacheKey);
-    console.log(`Cache limpiado para: ${cacheKey}`);
 }
 
-// FUNCIÓN UTILITARIA PARA OBTENER CATEGORÍAS ÚNICAS
 export async function fetchCategories() {
     try {
         const products = await fetchProducts();

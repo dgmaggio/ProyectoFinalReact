@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-    const isAuth = localStorage.getItem('auth') === 'true';
+    const token = localStorage.getItem('token');
+    const isAuth = !!token;
     const username = localStorage.getItem('user');
 
     return (
@@ -11,7 +12,7 @@ const Footer = () => {
                     <div className="flex space-x-24 sm:m-0 mb-4">
                         <div>
                             <div
-                                className="font-bold mb-2"
+                                className="font-bold mb-2 text-cyan-950"
                             >
                                 Proyecto Final
                             </div>
@@ -72,7 +73,7 @@ const Footer = () => {
 
                         <div>
                             <div
-                                className="font-bold mb-2"
+                                className="font-bold mb-2 text-cyan-950"
                             >
                                 Tienda
                             </div>
@@ -120,7 +121,7 @@ const Footer = () => {
                     <div className="sm:m-0 text-xs">
                         <p className="mb-2">
                             © 2025 Proyecto Final<br/>
-                            Todos los derechos reservados.
+                            Todos los derechos reservados
                         </p>
 
                         <p>

@@ -4,6 +4,7 @@ import ProductsForm from '../components/admin/ProductsForm';
 import ProductsList from '../components/admin/ProductsList';
 import ConfirmationModal from '../components/common/ConfirmationModal';
 import Button from '../components/common/Button';
+import SearchBox from '../components/common/SearchBox'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { createProduct, updateProduct, deleteProduct, fetchProducts } from '../utils/api';
@@ -15,11 +16,11 @@ const Admin = () => {
     const [productoAEditar, setProductoAEditar] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const { notifySuccess, notifyError } = useToast();
     const { modalProps, confirmDelete } = useConfirmation();
 
-    // Cargar productos al montar el componente
     useEffect(() => {
         loadProducts();
     }, []);
@@ -34,9 +35,29 @@ const Admin = () => {
         }
     };
 
+    const getFilteredProducts = () => {
+        if (!searchTerm.trim()) {
+            return productos;
+        }
+
+        const term = searchTerm.toLowerCase();
+        return productos.filter(producto => 
+            producto.title.toLowerCase().includes(term) ||
+            producto.category.toLowerCase().includes(term) ||
+            producto.id.toString().includes(term)
+        );
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchTerm(value);
+    };
+
+    const handleClearSearch = () => {
+        setSearchTerm('');
+    };
+    
     const agregarProducto = async (producto) => {
         setLoading(true);
-
         try {
             const nuevoProducto = await createProduct(producto);
             setProductos([...productos, nuevoProducto]);
@@ -52,10 +73,8 @@ const Admin = () => {
 
     const actualizarProducto = async (productoActualizado) => {
         setLoading(true);
-
         try {
             const productoEditado = await updateProduct(productoActualizado.id, productoActualizado);
-            
             setProductos(productos.map(p => 
                 p.id === productoActualizado.id ? productoEditado : p
             ));
@@ -71,17 +90,14 @@ const Admin = () => {
     };
 
     const borrarProducto = async (id) => {
-        // Buscar el producto para mostrar su nombre en la confirmación
         const producto = productos.find(p => p.id === id);
         const nombreProducto = producto ? producto.title : 'este producto';
 
-        // Mostrar modal de confirmación
         confirmDelete(nombreProducto, async () => {
             try {
                 await deleteProduct(id);
                 setProductos(productos.filter(p => p.id !== id));
                 
-                // Si estábamos editando el producto eliminado, cancelar edición
                 if (productoAEditar && productoAEditar.id === id) {
                     setProductoAEditar(null);
                     setIsModalOpen(false);
@@ -96,16 +112,14 @@ const Admin = () => {
     };
 
     const editarProducto = (producto) => {
-        // Adaptar los datos del producto de la API al formato esperado por el formulario
         const productoParaEditar = {
             id: producto.id,
-            nombre: producto.title,
             title: producto.title,
-            precio: producto.price,
             price: producto.price,
             description: producto.description,
             image: producto.image,
-            category: producto.category
+            category: producto.category,
+            featured: producto.featured || false
         };
         
         setProductoAEditar(productoParaEditar);
@@ -122,27 +136,49 @@ const Admin = () => {
         setProductoAEditar(null);
     };
 
+    const productosFiltrados = getFilteredProducts();
+
     return (
         <section>
-            <PageHeader />
+            <PageHeader title="Administrador de Productos" breadcrumb="Administración" />
 
-            {/* Botón para agregar producto */}
-            <div className="px-4 lg:px-8 pb-6">
-                <Button onClick={abrirModalNuevoProducto}>
-                    <FontAwesomeIcon icon={faPlus} /> Agregar Producto
-                </Button>
+            <div className="px-4 lg:px-8 pb-2">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                    <Button onClick={abrirModalNuevoProducto}>
+                        <FontAwesomeIcon icon={faPlus} />
+                        <span className="ml-2">Agregar Producto</span>
+                    </Button>
+                    
+                    <div className="text-sm text-gray-600">
+                        {searchTerm ? (
+                            <span>
+                                Mostrando {productosFiltrados.length} de {productos.length} productos
+                            </span>
+                        ) : (
+                            <span>Total: {productos.length} productos</span>
+                        )}
+                    </div>
+                </div>
             </div>
+
+            <SearchBox
+                searchTerm={searchTerm}
+                onSearchChange={handleSearchChange}
+                onClearSearch={handleClearSearch}
+                placeholder="Buscá por nombre, categoría o ID..."
+                helpText="Escribí para buscar en tiempo real"
+                noResultsText="No se encontraron productos para"
+                showResults={true}
+                resultsCount={productosFiltrados.length}
+                totalCount={productos.length}
+            />
             
-            <hr />
-            
-            {/* Lista de productos */}
             <ProductsList
-                productos={productos}
+                productos={productosFiltrados}
                 onEdit={editarProducto}
                 onDelete={borrarProducto}
             />
 
-            {/* Modal del formulario */}
             <ProductsForm
                 isOpen={isModalOpen}
                 onSubmit={productoAEditar ? actualizarProducto : agregarProducto}
@@ -150,7 +186,6 @@ const Admin = () => {
                 onCancel={cerrarModal}
             />
 
-            {/* Modal de confirmación */}
             <ConfirmationModal {...modalProps} />
         </section>
     );
